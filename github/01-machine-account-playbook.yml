@@ -1,0 +1,9 @@
+---
+- name: Set up Github Machine account
+  hosts: all
+  become: yes
+  # remote_user: user 
+
+  roles:
+    - 00_ssh
+ 

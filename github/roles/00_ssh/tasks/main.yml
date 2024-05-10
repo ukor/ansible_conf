@@ -1,0 +1,25 @@
+---
+- name: Create SSH directory
+  ansible.builtin.file:
+    path: ~/.ssh
+    state: directory
+    mode: 700
+    recurse: yes
+
+- name: Write SSH Private key to file
+  ansible.builtin.file:
+    content: "{{ lookup('env', 'GITHUB_MACHINE_USER_SSH_PRIVATE_KEY') }}"
+    dest: ~/.ssh/github_machine_account
+    mode: 700
+
+- name: Write SSH Public key to file
+  ansible.builtin.file:
+    content: "{{ lookup('env', 'GITHUB_MACHINE_USER_SSH_PUBLIC_KEY') }}"
+    dest: ~/.ssh/github_machine_account.pub
+    mode: 700
+
+- name: Copy SSH config 
+  ansible.builtin.copy:
+    src: ../../../vars/configs/ssh/config
+    dest: ~/.ssh/config
+    mode: 700

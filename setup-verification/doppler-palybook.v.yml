@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+
+  tasks:
+    - name: Get Doppler Secret
+      ansible.builtin.debug:
+        msg: "'{{ lookup('env', 'DOPPLER_PROJECT') }}' is the Doppler project variable."
+    
+    - name: Get and save doppler secret as variable
+      command: echo "{{ lookup('env', 'DOPPLER_CONFIG') }}"
+      register: configName
+
+    - name: Print the value of register variable
+      ansible.builtin.debug:
+        var: configName.stdout
+
+    - name: Get public key
+      command: echo "{{ lookup('env', 'SSH_PUBLIC_KEY') }}"
+      register: ssh_public_key
+
+    - name: Print the value of register variable
+      debug:
+        var: ssh_public_key.stdout

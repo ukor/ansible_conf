@@ -1,0 +1,3 @@
+Host github.com
+  PreferredAuthentications publickey
+  IdentityFile ~/.ssh/github_machine_account
