@@ -1,0 +1,8 @@
+--- 
+- name: Install git
+  apt:
+    name:
+      - git
+      - curl
+    state: latest
+    update_cache: yes

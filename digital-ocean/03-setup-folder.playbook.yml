@@ -1,0 +1,32 @@
+---
+- name: Setup Server folders 
+  hosts: all
+  become: yes
+  remote_user: "{{ lookup('env', 'SERVER_USER') }}" 
+
+
+  tasks:
+    - name: Install curl, git and nginx
+      apt:
+        name:
+          - nginx
+        state: latest
+        update_cache: yes
+
+    - name: Setup server folder
+      become: true
+      become_user: "{{ lookup('env', 'SERVER_USER') }}"
+      ansible.builtin.shell: |
+        sudo chown -R "$USER":www-data /var/www
+        find /var/www -type f -exec chmod 0660 {} \;
+        sudo find /var/www -type d -exec chmod 2770 {} \;
+
+        sudo chown -R "$USER":www-data /srv
+        find /srv -type f -exec chmod 0660 {} \;
+        sudo find /srv -type d -exec chmod 2770 {} \;
+
+    - name: Start Nginx 
+      ansible.builtin.service:
+        name: nginx 
+        state: started
+        enabled: true

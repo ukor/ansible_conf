@@ -1,0 +1,77 @@
+---
+- name: Install application pacakges 
+  hosts: all
+  become: yes
+  remote_user: "{{ lookup('env', 'SERVER_USER') }}" 
+
+  roles:
+    - certbot
+    - doppler
+    # - nodejs
+    # - pm2 
+    # - krakend
+    # - docker
+    #
+
+  tasks:
+    - name: Install curl, git and nginx
+      apt:
+        name:
+          - curl
+          - git
+          - nginx
+        state: latest
+        update_cache: yes
+
+    - name: Setup server folder
+      become: true
+      become_user: "{{ lookup('env', 'SERVER_USER') }}"
+      ansible.builtin.shell: |
+        sudo chown -R "$USER":www-data /var/www
+        find /var/www -type f -exec chmod 0660 {} \;
+        sudo find /var/www -type d -exec chmod 2770 {} \;
+
+        sudo chown -R "$USER":www-data /srv
+        find /srv -type f -exec chmod 0660 {} \;
+        sudo find /srv -type d -exec chmod 2770 {} \;
+
+    - name: Setup stanza
+      become: true
+      become_user: "{{ lookup('env', 'SERVER_USER') }}"
+      ansible.builtin.user: |
+
+        cd /tmp
+
+        whoami >> readme.txt
+        echo $PWD >> readme.txt
+
+        curl -L -o stanza.deb https://github.com/observIQ/stanza/releases/download/v1.6.1/stanza_1.6.1_linux_amd64.deb
+
+        sudo apt-get install -f ./stanza.deb
+
+        sudo systemctl enable --now stanza
+
+        rm -r stanza.deb
+
+        cd ~
+
+    - name: Setup Node Exporter
+      become: true
+      become_user: "{{ lookup('env', 'SERVER_USER') }}"
+      ansible.builtin.shell: | 
+
+        cd /tmp
+
+        wget https://github.com/prometheus/node_exporter/releases/download/v1.8.0/node_exporter-1.8.0.linux-arm64.tar.gz
+
+        tar xvfz node_exporter-1.8.0.inux-arm64.tar.gz
+
+        cp node_exporter-1.8.0.linux-arm64/node_exporter /usr/bin
+
+        chmod +x node_exporter
+
+    - name: Start Nginx 
+      ansible.builtin.service:
+        name: nginx 
+        state: started
+        enabled: true

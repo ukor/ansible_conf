@@ -1,0 +1,6 @@
+Host github.com
+  PreferredAuthentications publickey
+  IdentityFile ~/.ssh/github_machine_account
+  User git
+  Port 443
+  Hostname ssh.github.com

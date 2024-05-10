@@ -1,0 +1,4998 @@
+{
+  "$schema": "https://www.krakend.io/schema/krakend.json",
+  "version": 3,
+  "name": "API Gateway [Production]",
+  "extra_config": {
+    "router": {
+      "auto_options": true
+    }
+  },
+  "port": 7200,
+  "host": ["http://127.0.0.1:7200"],
+  "timeout": "30000ms",
+  "cache_ttl": "500s",
+  "output_encoding": "no-op",
+  "endpoints": [
+    {
+      "endpoint": "/_unizonn_echo",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/__echo",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET"
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/_unizonn_ping",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/__debug",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET"
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/payments",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/payments",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "get-metrics-payment",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/payments/card",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/payments/card",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "get-metrics-payment-card",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/payments/cash",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/payments/cash",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "get-metrics-payment-cash",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/payments/total",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/payments/total",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "get-metrics-payment-total",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/payment/payout",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/payment/payout",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "get-payment-payout-cb",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/payment/payout",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/payment/payout",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "post-payout-cb",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/payment/bank-information",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/payment/bank-information",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "post-bank-info-cb",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/payment/bank-information",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/payment/bank-information",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "get-bank-info-cb",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/payment/bank-information",
+      "method": "DELETE",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/payment/bank-information",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "DELETE",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "delete-bank-information-cb",
+              "timeout": 10,
+              "max_errors": 2,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/payment/bank-information/{userId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/payment/bank-information/{userId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "get-user-bank-information-cb",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/payment/account-name",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/payment/account-name",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "get-account-name-cb",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/activity-logs",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/activity-logs",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/activity-logs/{userId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/activity-logs/{userId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/affiliates/{userId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/affiliates/{userId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"],
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "affiliates-cb",
+              "timeout": 20,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          }
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/affiliates/passenger/{userId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/affiliates/passenger/{userId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "affiliates-passenger-cb",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/affiliates/driver/{userId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/affiliates/driver/{userId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "affiliates-driver-cb",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/assessments/driver/{driverId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/assessments/driver/{driverId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "assessments-driver",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/assessments/driver/{driverId}",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/assessments/driver/{driverId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/assessments/verifications/{driverId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/assessments/verifications/{driverId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/assessments/verification/{driverId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/assessments/verification/nin/{driverId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/assessments/verify/nin",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/assessments/verify/nin",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/assessments/verify/driver-license",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/assessments/verify/driver-license",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/assessments/verify/bvn",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/assessments/verify/bvn",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/assessments/verification/bvn/{driverId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/assessments/verification/bvn/{driverId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/assessments/verification/driver-license/{driverId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/assessments/verification/driver-license/{driverId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/assessments/vehicles/{vehicleId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/assessments/vehicles/{vehicleId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/assessments/vehicles/{vehicleId}",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/assessments/vehicles/{vehicleId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/credentials/drivers/{driverId}/review",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/credentials/drivers/{driverId}/review",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/exports/users",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/exports/users",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "exports-users-cb",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/user/role-type",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/user/role-type",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/users/registration",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/users/registration",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/users/drivers/top-rides",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/users/drivers/top-rides",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/users/drivers/total-rides",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/users/drivers/total-rides",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/users/drivers/earnings",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/users/drivers/earnings",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/users/passengers/amount-spent",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/users/passengers/amount-spent",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/users/passengers/top-rides",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/users/passengers/top-rides",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/profile-reviews/users/pending",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/profile-reviews/users/pending",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users",
+      "method": "DELETE",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "DELETE",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 10,
+              "max_errors": 2,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/driver/verify",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/driver/verify",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/states",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/states",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "add-state-cb",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/states",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/states",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 3,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/states/{stateId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/states/{stateId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/states/{stateId}",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/states/{stateId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 2,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/states/{stateId}",
+      "method": "DELETE",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/states/{stateId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "DELETE",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 2,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/settings",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/settings",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/settings",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/settings",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/profile-reviews",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/profile-reviews",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/profile-reviews/users/{userId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/profile-reviews/users/{userId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/profile-reviews/users/{userId}/review",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/profile-reviews/users/{userId}/review",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/notifications",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/notifications",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 10,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/notifications",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/notifications",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/notifications/{id}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/notifications/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/notifications/{id}",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/notifications/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 10,
+              "max_errors": 3,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/notifications/{id}",
+      "method": "DELETE",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/notifications/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "DELETE",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 10,
+              "max_errors": 2,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/notifications/users",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/notifications/user",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/notifications/users",
+      "method": "DELETE",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/notifications/users",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "DELETE",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 2,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/notifications/users/{id}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/notifications/users/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/notifications/users/read",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/notifications/users/read",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 10,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/permissions/users/{id}",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/permissions/users/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/statement/balance/{userId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/statement/balance/{userId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/statement/earnings/{userId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/statement/earnings/{userId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/statement/invoice/{userId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/statement/invoice/{userId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/statement/remittance",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/statement/remittance",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/earnings/total",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/earnings/total",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 10,
+              "max_errors": 1,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/activityScores/states",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/activityScores/states",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/reports/total/status",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/reports/total/status",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/reports/total/states",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/reports/total/states",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/reports",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/reports",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/reports",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/reports",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/reports/{id}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/reports/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/reports/{id}",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/reports/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/reports/{id}",
+      "method": "DELETE",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/reports/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "DELETE",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 2,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/bounty",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/bounty",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/bounty",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/bounty",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/bounty/{id}",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/bounty/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 3,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/invoices/rides/{rideId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/invoices/rides/{rideId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/invoices/{invoiceId}/driver",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/invoices/{invoiceId}/driver",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/emergency-contacts",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/emergency-contacts",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/emergency-contacts",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/emergency-contacts",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/emergency-contacts/{contactId}",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/emergency-contacts/{contactId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/api",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/discounts",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/discounts",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/discounts",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/discounts",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/discounts/{id}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/discounts/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/discounts/{id}",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/discounts/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/discounts/{id}",
+      "method": "DELETE",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/discounts/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "DELETE",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/discounts/total-per-states",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/discounts/total-per-states",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/discounts/total-rides-and-discount-amount",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/discounts/total-rides-and-discount-amount",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/exports/vehicles",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/exports/vehicles",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/vehicles/registration",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/vehicles/registration",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/metrics/vehicles/total-rides",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/metrics/vehicles/total-rides",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/vehicles",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/vehicles",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/vehicles",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/vehicles",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/vehicles/active",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/vehicles/active",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/vehicles/{id}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/vehicles/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/vehicles/{id}",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/vehicles/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/vehicles/{id}",
+      "method": "DELETE",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/vehicles/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "DELETE",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/vehicles/activate/{vehicleId}",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/vehicles/activate/{vehicleId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/vehicles/user/{userId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/vehicles/user/{userId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/vehicles/owned",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/vehicles/owned",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/vehicles/owned/{vehicleId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/vehicles/owned/{vehicleId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/exports/rides",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/exports/rides",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/exports/rides/history",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/exports/rides/history",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/invoices/driver/{driverId}/rides",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/invoices/driver/{driverId}/rides",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/rides",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/rides",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/rides/history",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/rides/history",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/ride/{id}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/rides/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/rides/{rideId}/complaints",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/rides/{rideId}/complaints",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/rides/{rideId}/complaints",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/rides/{rideId}/complaints",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/rides/{rideId}/complaints/{complaintsId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/rides/{rideId}/complaints/{complaintsId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/rides/{rideId}/complaints/{complaintsId}",
+      "method": "DELETE",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/rides/{rideId}/complaints/{complaintsId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "DELETE",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "delete-complaints",
+              "timeout": 15,
+              "max_errors": 3,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/rides/drivers/metrics/distance-and-duration",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/rides/drivers/metrics/distance-and-duration",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/rides/drivers/metrics/amount-earned",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/rides/drivers/metrics/amount-earned",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/ride/share",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/ride/share",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/reviews",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/reviews",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "post-reviews",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/reviews/last-ride",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/reviews/last-ride",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/reviews/user/{userId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/reviews/user/{userId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/reviews/{reviewId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/reviews/{reviewId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/reviews/user/ratings",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/reviews/user/ratings",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/drivers",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/drivers",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/passengers",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/passengers",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/staffs",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/staffs",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/signup-stage",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/signup-stage",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/signup-stage",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/signup-stage",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/profile",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/profile",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/profile",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/profile",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/profile/passengers",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/profile/passengers",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/profile/passengers",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/profile/passengers",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/profile/drivers",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/profile/drivers",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/profile/drivers",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/profile/drivers",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/profile/staffs",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/profile/staffs",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/profile/staffs",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/profile/staffs",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/{id}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/{id}",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/{id}",
+      "method": "DELETE",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "DELETE",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/users/passengers/{id}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/passengers/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/passengers/{id}",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/passengers/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/passengers/{id}",
+      "method": "DELETE",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/passengers/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/drivers/{id}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/drivers/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/drivers/{id}",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/drivers/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/drivers/{id}",
+      "method": "DELETE",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/drivers/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "DELETE",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/staffs/{id}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/staffs/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/staffs/{id}",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/staffs/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/users/staffs/{id}",
+      "method": "DELETE",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/users/staffs/{id}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "DELETE",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/cards/users/{userId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/cards/users/{userId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/cards",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/cards",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/cards/{cardId}/users/{userId}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/cards/{cardId}/users/{userId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/cards/{cardId}/users/{userId}",
+      "method": "DELETE",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/cards/{cardId}/users/{userId}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/credentials/{documentType}/documentRef",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/credentials/{documentType}/documentRef",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/credentials/{documentType}/documentRef",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/credentials/{documentType}/documentRef",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/credentials/{documentType}/{document}/{side}/{documentRef}",
+      "method": "DELETE",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/credentials/{documentType}/{document}/{side}/{documentRef}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "DELETE",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/credentials/vehicles/{vehicleId}/review",
+      "method": "PUT",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/credentials/vehicles/{vehicleId}/review",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "PUT",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/credentials/vehicles/{vehicleId}/review",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/credentials/vehicles/{vehicleId}/review",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v1/daylong-play/{id_play}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v1/daylong-play/{id_play}",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ]
+    },
+    {
+      "endpoint": "/v2",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5500"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/passenger/sign-up",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/passenger/sign-up",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "signup-circuit-breaker",
+              "timeout": 10,
+              "max_errors": 3,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5500"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/passenger/login",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/passenger/login",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "passenger-login-circuit-breaker",
+              "timeout": 10,
+              "max_errors": 3,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5500"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/passenger/resend-otp",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/passenger/resend-otp",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "passenger-resend-otp-cb",
+              "timeout": 10,
+              "max_errors": 3,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5500"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/passenger/verify-otp",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/passenger/verify-otp",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "host": ["http://127.0.0.1:5500"],
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "passenger-verify-otp-cb",
+              "timeout": 10,
+              "max_errors": 3,
+              "log_status_change": true
+            }
+          }
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v3/auth/passenger/sign-up",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v3/auth/passenger/sign-up",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "passenger-sign-up-v3-cb",
+              "timeout": 10,
+              "max_errors": 3,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5500"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/driver/hello",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/driver/hello",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": ["http://127.0.0.1:5500"],
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "driver-hello-cb",
+              "timeout": 10,
+              "max_errors": 3,
+              "log_status_change": true
+            }
+          }
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/driver/login",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/driver/login",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "driver-login-cb",
+              "timeout": 10,
+              "max_errors": 3,
+              "log_status_change": true
+            },
+            "qos/ratelimit/proxy": {
+              "max_rate": 5,
+              "capacity": 5,
+              "every": "1s"
+            }
+          },
+          "host": ["http://127.0.0.1:5500"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/driver/resend-otp",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/driver/resend-otp",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "host": ["http://127.0.0.1:5500"],
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "driver-resend-otp-cb",
+              "timeout": 10,
+              "max_errors": 3,
+              "log_status_change": true
+            }
+          }
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/driver/verify-otp",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/driver/verify-otp",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "host": ["http://127.0.0.1:5500"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/driver/sign-up",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/driver/sign-up",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "driver-sign-up-cb",
+              "timeout": 10,
+              "max_errors": 3,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5500"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/driver/forgot-password",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/driver/forgot-password",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "driver-forgot-password-cb",
+              "timeout": 10,
+              "max_errors": 3,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5500"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/driver/reset-password",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/driver/reset-password",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "host": ["http://127.0.0.1:5500"],
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "driver-reset-password-cb",
+              "timeout": 10,
+              "max_errors": 3,
+              "log_status_change": true
+            }
+          }
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/driver/verify-nin",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/driver/verify-nin",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "host": ["http://127.0.0.1:5500"],
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "driver-very-nin-cb",
+              "timeout": 10,
+              "max_errors": 3,
+              "log_status_change": true
+            }
+          }
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/driver/verify-bvn",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/driver/verify-bvn",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "driver-verify-bvn",
+              "timeout": 10,
+              "max_errors": 1,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5500"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/driver/verify-driver-license",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/driver/verify-driver-license",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "host": ["http://127.0.0.1:5500"],
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "verify-driver-license-cb",
+              "timeout": 10,
+              "max_errors": 3,
+              "log_status_change": true
+            }
+          }
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/staff/big-bang",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/staff/big-bang",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/ratelimit/proxy": {
+              "max_rate": 2,
+              "capacity": 2,
+              "every": "1s"
+            },
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "big-bang-cb",
+              "timeout": 10,
+              "max_errors": 3,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5500"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/staff/sign-up",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/staff/sign-up",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "staff-sign-up-cb",
+              "timeout": 10,
+              "max_errors": 3,
+              "log_status_change": true
+            },
+            "qos/ratelimit/proxy": {
+              "max_rate": 5,
+              "capacity": 5,
+              "every": "1s"
+            }
+          },
+          "host": ["http://127.0.0.1:5500"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/staff/login",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/staff/login",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/ratelimit/proxy": {
+              "max_rate": 2,
+              "capacity": 2,
+              "every": "1s"
+            },
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "staff-login-cb",
+              "timeout": 10,
+              "max_errors": 1,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5500"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/staff/verify-otp",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/staff/verify-otp",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "host": ["http://127.0.0.1:5500"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/staff/forgot-password",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/staff/forgot-password",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "host": ["http://127.0.0.1:5500"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/auth/staff/reset-password",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/auth/staff/reset-password",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "staff-reset-password",
+              "timeout": 10,
+              "max_errors": 3,
+              "log_status_change": true
+            },
+            "qos/ratelimit/proxy": {
+              "max_rate": 5,
+              "capacity": 5,
+              "every": "1s"
+            }
+          },
+          "host": ["http://127.0.0.1:5500"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/api",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/api",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    },
+    {
+      "endpoint": "/v2/passenger/verification",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "input_query_strings": ["*"],
+      "backend": [
+        {
+          "url_pattern": "/v2/passenger/verification",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "qos/circuit-breaker": {
+              "interval": 60,
+              "name": "circuit-breaker-1",
+              "timeout": 15,
+              "max_errors": 5,
+              "log_status_change": true
+            }
+          },
+          "host": ["http://127.0.0.1:5300"]
+        }
+      ],
+      "input_headers": [
+        "Origin",
+        "Authorization",
+        "Content-Type",
+        "User-Agent",
+        "Accept",
+        "X-Forwarded-For",
+        "X-Forwarded-Host"
+      ]
+    }
+  ],
+  "debug_endpoint": true,
+  "echo_endpoint": true
+}

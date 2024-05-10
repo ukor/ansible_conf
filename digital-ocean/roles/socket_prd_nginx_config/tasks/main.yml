@@ -1,0 +1,29 @@
+---
+- name: Copy Socket production (prd) config 
+  become: yes
+  become_user: root
+  # user: "{{ lookup('env', 'SERVER_USER') }}"
+  ansible.builtin.copy:
+    src: ../../../vars/configs/nginx/socket-prd.nginx.conf
+    dest: /etc/nginx/sites-available/socket-prd.nginx.conf
+
+- name: Prepare certbot command
+  # become: yes
+  # become_user: "{{ lookup('env', 'SERVER_USER') }}"
+  ansible.builtin.shell: |
+    CONFIG_PATH=/etc/nginx/sites-enabled/socket-prd.nginx.conf
+    if [ ! -f "$CONFIG_PATH" ]; then
+      sudo ln -s /etc/nginx/sites-available/socket-prd.nginx.conf /etc/nginx/sites-enabled/
+    fi
+
+
+- name: Test nginx configuration
+  ansible.builtin.shell: sudo nginx -t 
+
+- name: Reload nginx configuration
+  become: yes
+  ansible.builtin.shell: sudo systemctl restart nginx
+
+- name: Check nginx status
+  become: yes
+  ansible.builtin.shell: sudo systemctl status nginx

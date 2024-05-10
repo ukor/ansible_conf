@@ -1,0 +1,11 @@
+---
+- name: Setup Nginx configuration for socket production environment
+  hosts: all
+  become: no
+  # become_user: root
+  user: "{{ lookup('env', 'SERVER_USER') }}"
+  gather_facts: yes
+
+  roles:
+    - var_www
+ 

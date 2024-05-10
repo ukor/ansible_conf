@@ -1,0 +1,28 @@
+---
+- name: Copy Socket stagging (stg) config 
+  become: yes
+  become_user: root
+  ansible.builtin.copy:
+    src: ../../../vars/configs/nginx/socket-stg.nginx.conf
+    dest: /etc/nginx/sites-available/socket-stg.nginx.conf
+
+- name: Prepare certbot command
+  ansible.builtin.shell: | 
+    CONFIG_FILE_PATH=/etc/ssh/sites-enabled/socket-stg.nginx.conf
+
+    if [ ! -f "$CONFIG_FILE_PATH" ]; then
+     sudo ln -s /etc/nginx/sites-available/socket-stg.nginx.conf /etc/nginx/sites-enabled/
+    fi
+
+- name: Test nginx configuration
+  ansible.builtin.shell: sudo nginx -t 
+
+- name: Reload nginx configuration
+  become: yes
+  ansible.builtin.shell: sudo systemctl restart nginx
+
+- name: Check nginx status
+  become: yes
+  ansible.builtin.shell: sudo systemctl status nginx
+
+

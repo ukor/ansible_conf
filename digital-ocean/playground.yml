@@ -1,0 +1,36 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+
+  vars:
+    hello: "{{ lookup('env', 'DOPPLER_CONFIG') }}"
+
+  tasks:
+    - name: Basic usage
+      ansible.builtin.debug:
+        msg: "'{{ lookup('ansible.builtin.env', 'HOME') }}' is the HOME environment variable."
+    
+    - name: Get and save home directory as variable
+      command: echo "{{ lookup('ansible.builtin.env', 'HOME') }}"
+      register: home
+
+    - name: Print the value of register variable
+      ansible.builtin.debug:
+        var: home.stdout
+        
+    - name: Doppler environment
+      ansible.builtin.debug: 
+        msg: "Doppler environment is {{hello}} "
+
+    - name: Get public key
+      command: cat {{ home.stdout + '/.ssh/serverKey.pub'}}
+      register: ssh_public_key
+
+    - name: Print the value of register variable
+      debug:
+        var: ssh_public_key.stdout
+
+    - name: Display all variables/facts known for a host
+      ansible.builtin.debug:
+        var: hostvars[inventory_hostname]

@@ -1,0 +1,128 @@
+---
+- name: Install aptitude
+  apt:
+    name: aptitude
+    state: latest
+    update_cache: true
+    force_apt_get: true
+
+- name: Server initial setup
+  apt: name=aptitude update_cache=yes state=latest force_apt_get=yes 
+
+# Sudo group setup
+- name: Make sure 'wheel' group is set
+  group:
+    name: wheel
+    state: present
+    
+- name: Allow wheel group to be passwordless
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: '/usr/sbin/visudo -cf %s'
+    
+# User + Key setup
+- name: Create a service account user with sudo privileges
+  user:
+    name: "{{ lookup('env', 'SERVER_USER') }}"
+    state: present
+    groups: wheel
+    append: true
+    create_home: true
+    shell: /bin/bash
+
+- name: Set authorized key for remote user
+  authorized_key:
+     user:  "{{ lookup('env', 'SERVER_USER') }}"
+     state: present
+     key: "{{ lookup('env', 'SSH_PUBLIC_KEY') }}"
+
+- name: Disable password authentication for root
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    regexp: '^#?PermitRootLogin'
+    line: 'PermitRootLogin prohibit-password'
+
+# Install packages
+- name: Update apt
+  apt: update_cache=yes
+
+
+- name: Install required system packages
+  apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
+    state: latest
+    update_cache: true
+
+# UFW setup
+- name: UFW - Enable UFW
+  community.general.ufw:
+    state: enabled
+    policy: allow
+- name: UFW - Allow OpenSSH on port 20244
+  community.general.ufw:
+    rule: limit
+    port: "{{ lookup('env', 'SERVER_SSH_PORT') }}"
+    proto: tcp
+    log: true
+    comment: Allow SSH on {{ lookup('env', 'SERVER_SSH_PORT') }}
+- name: UFW - Allow port 80
+  community.general.ufw:
+    rule: allow
+    port: '80'
+    proto: tcp
+- name: UFW - Allow port 443
+  community.general.ufw: 
+    rule: allow
+    port: '443'
+    proto: tcp
+
+# A robust solution 
+# See https://dmsimard.com/2016/03/15/changing-the-ssh-port-with-ansible
+- name: Change SSH Port number with lineinfile
+  become_user: root
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/ssh_config
+    regexp: "^Port"
+    line: "Port {{ lookup('env', 'SERVER_SSH_PORT') }}"
+    backup: true
+    owner: root
+    group: root
+    state: present
+
+- name: Change Address type
+  become_user: root
+  become: yes
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "AddressFamily"
+    line: "AddressFamily inet"
+    backup: true
+    state: present
+
+ 
+- name: Change SSH port number
+  become: yes
+  become_user: root
+  ansible.builtin.shell: |
+    SSH_PORT_CONFIG_FILE_PATH=/etc/ssh/sshd_config.d/ssh-port.conf
+    echo "Port {{ lookup('env', 'SERVER_SSH_PORT') }}\n AddressFamily inet\n" > $SSH_PORT_CONFIG_FILE_PATH 
+
+
+# See https://dmsimard.com/2016/03/15/changing-the-ssh-port-with-ansible
+- name: Restart sshd 
+  become_user: root
+  ansible.builtin.service:
+    name: sshd
+    state: restarted
+ 

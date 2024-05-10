@@ -1,0 +1,76 @@
+---
+- name: get user home directory
+  shell: >
+        getent passwd {{ lookup('env', 'SERVER_USER') }}  | awk -F: '{ print $6 }'
+  changed_when: false
+  register: user_home
+
+- name: Install pm2 globally
+  become: true
+  become_user: "{{ lookup('env', 'SERVER_USER') }}"
+  args:
+    executable: /bin/bash
+  ansible.builtin.shell: |
+    source ~/.bashrc
+    
+    NVM_DIR=~/.nvm
+   
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+    npm install -g pm2
+    NPM_PREFIX=$(npm config get prefix)
+
+    PM2_SYMLINK_PATH=/usr/bin/pm2
+
+    if [ ! -f "$PM2_SYMLINK_PATH" ]
+    then
+      # create symlink
+      sudo ln -s "$NPM_PREFIX/lib/node_modules/pm2/bin/pm2" /usr/bin/pm2
+    else
+      # update symlink
+      sudo ln -sf "$NPM_PREFIX/lib/node_modules/pm2/bin/pm2" /usr/bin/pm2
+    fi
+
+- name: Print user home directory
+  ansible.builtin.debug:
+    msg: "{{ user_home.stdout }}"
+  
+- name: Set PM2 log directory as variable
+  command: echo "{{ user_home }}/pm2-logs"
+  register: pm2_log_path
+
+- name: Create PM2 log directory 
+  become: true
+  become_user: "{{ lookup('env', 'SERVER_USER') }}"
+  ansible.builtin.file:
+    path: "{{ user_home.stdout }}/pm2-logs"
+    state: directory
+
+- name: Print PM2 log path 
+  become: false
+  ansible.builtin.debug:
+    var: pm2_log_path.stdout
+
+- name: Install pm2-logrotate using PM2
+  command: pm2 install pm2-logrotate
+  become: false
+  become_user: "{{ lookup('env', 'SERVER_USER') }}"
+
+- name: Start PM2 and Log Rotate
+  become: true 
+  become_user: "{{ lookup('env', 'SERVER_USER') }}"
+  ansible.builtin.shell: |
+    pm2 install pm2-logrotate
+
+    pm2 set pm2-logrotate: max_size 20K
+
+    pm2 set pm2-logrotate:compress false
+
+    pm2 set pmw-logrotate:retain 30
+
+    pm2 startup
+
+    sudo su -c "env PATH=$PATH:/usr/bin/node pm2 startup systemd -u {{ lookup('env', 'SERVER_USER') }} --hp {{ user_home }}"
+
+    pm2 save
+

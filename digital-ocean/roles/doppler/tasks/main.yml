@@ -1,0 +1,15 @@
+---
+- name: installing pre requirement packages
+  become: true
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl 
+      - gnupg
+    state: latest
+    update_cache: yes
+
+- name: Install Doppler with shell
+  ansible.builtin.shell: (curl -Ls --tlsv1.2 --proto "=https" --retry 3 https://cli.doppler.com/install.sh || wget -t 3 -qO- https://cli.doppler.com/install.sh) | sudo sh
+

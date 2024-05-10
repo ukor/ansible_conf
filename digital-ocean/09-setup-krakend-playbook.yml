@@ -1,0 +1,74 @@
+---
+- name: Setup krakend api gateway for each node
+  hosts: all
+  become: yes
+  remote_user: "{{ lookup('env', 'SERVER_USER') }}"
+  gather_facts: yes
+
+  vars:
+    mode: "{{ mode }}"
+
+  roles: 
+    - krakend
+
+  tasks:
+    - name: Show Environment
+      ansible.builtin.debug:
+        msg: "Running in {{ mode }} environment."
+      notify:
+      - stop krakend
+
+    - name: Copy krakend configuration file - staging
+      when: mode == 'staging'
+      ansible.builtin.copy:
+        src: ./vars/configs/krakend/krakend_stg.json
+        dest: /opt/krakend_config/krakend.json
+
+    - name: Copy krakend configuration file - production
+      when: mode == 'production'
+      ansible.builtin.copy:
+        src: ./vars/configs/krakend/krakend_prd.json
+        dest: /opt/krakend_config/krakend.json
+    
+    - name: Test krakend configuration file
+      ansible.builtin.shell: |
+        krakend check -t --lint -ddd -c /opt/krakend_config/krakend.json
+
+    # - name: Test krakend configuration file - staging
+      # when: mode == 'production'
+      # ansible.builtin.shell: |
+        # mv /opt/krakend_config/krakend_prd.json /opt/krakend_config/krakend.json
+        # krakend check -t --lint -ddd -c /opt/krakend_config/krakend.json
+
+    - name: Copy krakend unit file
+      become: yes
+      become_user: root
+      ansible.builtin.copy:
+        src: ./vars/configs/krakend/krakend.service
+        dest: /etc/systemd/system/krakend.service
+        # dest: /opt/krakend_config/krakend.service
+        mode: '644'
+      notify:
+      - restart krakend
+
+    - name: Enable krakend service
+      become: yes
+      become_user: root
+      ansible.builtin.systemd_service:
+        name: krakend.service
+        enabled: true
+        state: started
+
+  handlers:
+    - name: stop krakend
+      ansible.builtin.systemd_service:
+        daemon_reload: true;
+        state: stop
+        name: krakend.service
+    - name: restart krakend
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+        state: restarted
+        name: krakend.service
+
+

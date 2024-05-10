@@ -1,0 +1,39 @@
+---
+- name: Remove certbot-auto and certbot os package
+  ansible.builtin.apt:
+    name: certbot
+    state: absent
+    update_cache: true
+
+- name: Install Certbot with --classic
+  community.general.snap:
+    name:
+      - certbot
+    classic: true
+    state: present
+
+- name: Initialize Certbot
+  ansible.builtin.shell: |
+    # running this command creates all neccessary folders
+    # This should be ran as a sudo user
+    #
+    certbot certificates
+
+- name: Prepare certbot command
+  ansible.builtin.shell: |
+    CERTBOT_FILE=/usr/bin/certbot
+    if [ ! -f "$CERTBOT_FILE" ]; then
+      sudo ln -s /snap/bin/certbot /usr/bin/certbot
+    fi
+
+- name: Add SSL Options
+  ansible.builtin.shell: |
+    PEM_FILE=/etc/letsencrypt/dhparams.pem
+    if [ ! -f "$PEM_FILE" ]; then
+      curl https://ssl-config.mozilla.org/ffdhe2048.txt >  /etc/letsencrypt/dhparams.pem
+    fi
+
+- name: Set SSL options for nginx
+  ansible.builtin.copy:
+    src: ../../../vars/configs/nginx/ssl-options.conf
+    dest: /etc/letsencrypt/ssl-options.conf

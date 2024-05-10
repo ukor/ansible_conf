@@ -1,0 +1,9 @@
+---
+- name: Set up Github Machine account
+  hosts: all
+  become: false 
+  become_user: "{{ lookup('env', 'SERVER_USER') }}"
+
+  roles:
+    - github_machine_account
+ 

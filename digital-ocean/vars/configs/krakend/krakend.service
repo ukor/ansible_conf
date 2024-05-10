@@ -1,0 +1,14 @@
+[Unit]
+Description=Manually created service for Krakend API gateway. Created by @ukor
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/opt/krakend_config/krakend_start.sh
+ExecReload=/opt/krakend_config/krakend_start.sh
+StandardOutput=append:/var/log/krakend.log
+StandardError=append:/var/log/krakend_error.log
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

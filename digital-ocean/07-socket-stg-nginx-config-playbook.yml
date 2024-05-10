@@ -1,0 +1,8 @@
+---
+- name: Setup Nginx configuration for socket staging environment
+  hosts: all
+  become: yes
+
+  roles:
+    - socket_stg_nginx_config
+ 

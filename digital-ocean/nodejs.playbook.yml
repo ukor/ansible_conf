@@ -1,0 +1,10 @@
+---
+- name: Setup nodejs
+  hosts: all
+  become: false
+  remote_user: "{{ lookup('env', 'SERVER_USER') }}"
+  gather_facts: yes
+
+
+  roles:
+    - nodejs

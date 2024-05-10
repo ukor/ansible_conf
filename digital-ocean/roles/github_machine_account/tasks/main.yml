@@ -1,0 +1,61 @@
+---
+- name: Create SSH directory if it does not exist
+  become: true 
+  become_user: "{{ lookup('env', 'SERVER_USER') }}"
+  ansible.builtin.file:
+    path: ~/.ssh
+    state: directory
+    mode: '0700'
+    recurse: yes
+
+- name: Copy SSH config
+  become: yes
+  become_user: "{{ lookup('env', 'SERVER_USER') }}"
+  ansible.builtin.copy:
+    src: ../../../vars/configs/ssh/config
+    dest: ~/.ssh/config
+    mode: '0664'
+
+# - name: Write to file
+  # become_user: "{{ lookup('env', 'SERVER_USER') }}"
+  # ansible.builtin.shell: | 
+    # FILE_PATH=~/.ssh/github_machine_account_rsa.pub
+
+    # if [ ! -f "$FILE_PATH" ]; then
+      # echo "{{ lookup('env', 'GITHUB_MACHINE_USER_SSH_PUBLIC_KEY') }}" > $FILE_PATH
+    # fi
+
+    # sudo chmod 0700 $FILE_PATH
+        
+- name: Write SSH Private key to file
+  become: true
+  become_user: "{{ lookup('env', 'SERVER_USER') }}"
+  ansible.builtin.shell: |
+    PRIVATE_KEY_FILE_PATH=~/.ssh/github_machine_account
+    echo "{{ lookup('env', 'GITHUB_MACHINE_USER_SSH_PRIVATE_KEY') }}" > $PRIVATE_KEY_FILE_PATH
+    sudo chmod 0700 $PRIVATE_KEY_FILE_PATH
+
+- name: Write SSH Public key to file
+  become: true
+  become_user: "{{ lookup('env', 'SERVER_USER') }}"
+  ansible.builtin.shell: |
+    PUBLIC_KEY_FILE_PATH=~/.ssh/github_machine_account.pub
+
+    echo "{{ lookup('env', 'GITHUB_MACHINE_USER_SSH_PUBLIC_KEY') }}\n" > $PUBLIC_KEY_FILE_PATH
+    sudo chmod 0700 $PUBLIC_KEY_FILE_PATH
+
+- name: Add Github Machine account to authorize keys
+  become: true 
+  become_user: "{{ lookup('env', 'SERVER_USER') }}"
+  ansible.builtin.shell: |
+    AUTHORIZED_KEYS_FILE_PATH=~/.ssh/authorized_keys
+
+    KEY="{{ lookup('env', 'GITHUB_MACHINE_USER_SSH_PUBLIC_KEY') }}"
+
+    if [ grep -Fxq "$KEY" "$AUTHORIZED_KEYS_FILE_PATH" ]
+    then
+      echo 'Key exist'
+    else
+      echo "$KEY\n" >> "$AUTHORIZED_KEYS_FILE_PATH"
+    fi
+

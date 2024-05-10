@@ -1,0 +1,3 @@
+---
+sys_packages: ['python3-apt', 'curl', 'vim', 'git', 'ufw']
+ssh_key_name: ServiceAccountKey

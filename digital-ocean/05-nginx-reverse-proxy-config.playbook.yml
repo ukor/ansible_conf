@@ -1,0 +1,38 @@
+---
+- name: Setup Nginx as reverse proxy 
+  hosts: all
+  remote_user: root
+
+  tasks:
+    - name: Copy Nginx reverse proxy configuration  
+      become: true
+      become_user: root
+    # user: "{{ lookup('env', 'SERVER_USER') }}"
+      ansible.builtin.copy:
+        src: ./vars/configs/nginx/reverse-proxy.nginx.conf
+        dest: /etc/nginx/sites-available/reverse-proxy.nginx.conf
+
+    - name: Create sysmlink to reverse proxy configuration
+      become: true 
+      become_user: "{{ lookup('env', 'SERVER_USER') }}"
+      ansible.builtin.shell: |
+        CONFIG_PATH=/etc/nginx/sites-enabled/reverse-proxy.nginx.conf
+        if [ ! -f "$CONFIG_PATH" ]; then
+          sudo ln -s /etc/nginx/sites-available/reverse-proxy.nginx.conf /etc/nginx/sites-enabled/
+        fi
+
+    - name: Test nginx configuration
+      become_user: "{{ lookup('env', 'SERVER_USER') }}"
+      become: true
+      ansible.builtin.shell: sudo nginx -t 
+
+    - name: Reload nginx configuration
+      become: true 
+      become_user: "{{ lookup('env', 'SERVER_USER') }}"
+      ansible.builtin.shell: sudo systemctl restart nginx
+
+    - name: Check nginx status
+      become: true 
+      become_user: "{{ lookup('env', 'SERVER_USER') }}"
+      ansible.builtin.shell: sudo systemctl status nginx
+ 

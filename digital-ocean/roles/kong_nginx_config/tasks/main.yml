@@ -1,0 +1,22 @@
+---
+- name: Copy Kong config 
+  ansible.builtin.copy:
+    src: ../../../vars/configs/nginx/kong-gateway.nginx.conf
+    dest: /etc/nginx/sites-available/kong-gateway.nginx.conf
+
+- name: Link and enable Kong config
+  ansible.builtin.shell: |
+    CONFIG_FILE=/etc/nginx/sites-enabled/kong-gateway.nginx.conf
+    if [ ! -f "$CONFIG_FILE" ]; then
+      sudo ln -s /etc/nginx/sites-available/kong-gateway.nginx.conf /etc/nginx/sites-enabled/
+    fi
+    
+- name: Test nginx configuration
+  ansible.builtin.shell: sudo nginx -t 
+
+- name: Reload nginx configuration
+  ansible.builtin.shell: sudo systemctl restart nginx
+
+- name: Check nginx status
+  ansible.builtin.shell: sudo systemctl status nginx
+

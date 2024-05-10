@@ -1,0 +1,17 @@
+---
+- name: Setup log transport
+  hosts: all
+  become: yes
+  remote_user: "{{ lookup('env', 'SERVER_USER') }}" 
+
+  tasks:
+    - name: Install stanza
+      become: true
+      become_user: "{{ lookup('env', 'SERVER_USER') }}"
+      ansible.builtin.shell: |
+        curl -L -o stanza.deb https://github.com/observIQ/stanza/releases/download/v1.6.1/stanza_1.6.1_linux_amd64.deb
+
+        sudo apt-get install -f ./stanza.deb
+
+        sudo systemctl enable --now stanza
+

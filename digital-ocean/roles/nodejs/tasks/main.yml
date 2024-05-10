@@ -1,0 +1,57 @@
+---
+- name: Install nvm
+  become: true
+  become_user: "{{ lookup('env', 'SERVER_USER') }}"
+  ansible.builtin.shell: >
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+  args:
+    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+
+- name: Update ~/.profile
+  ansible.builtin.lineinfile:
+    path: ~/.profile
+    line: source ~/.nvm/nvm.sh
+    create: yes
+
+- name: Install NodeJS and NPM
+  become: true
+  become_user: "{{ lookup('env', 'SERVER_USER') }}"
+  args:
+    executable: /bin/bash
+    creates: "~/.nvm/versions/node/v20.12.0"
+  ansible.builtin.shell: |
+    source ~/.bashrc
+
+    NVM_DIR=~/.nvm
+   
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm install v20.12.0
+    
+    nvm use v20.12.0
+
+    NPM_PREFIX=$(npm config get prefix)
+
+
+    NODE_SYMLINK_PATH=/usr/bin/node
+
+    if [ ! -f "$NODE_SYMLINK_PATH" ]
+    then
+      # create NODE_SYMLINK_PATH
+      sudo ln -s "$NPM_PREFIX/bin/node" "$NODE_SYMLINK_PATH"
+    else
+      # Update symlink
+      sudo ln -sf "$NPM_PREFIX/bin/node" "$NODE_SYMLINK_PATH"
+    fi
+
+    NPM_SYMLINK_PATH=/usr/bin/npm
+
+    if [ ! -f "$NPM_SYMLINK_PATH" ]
+    then
+      sudo ln -s "$NPM_PREFIX/lib/node_modules/npm/bin/npm-cli.js" "$NPM_SYMLINK_PATH"
+    else
+
+      sudo ln -sf "$NPM_PREFIX/lib/node_modules/npm/bin/npm-cli.js" "$NPM_SYMLINK_PATH"
+    fi
+
+    source ~/.bashrc
+

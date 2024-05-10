@@ -1,0 +1,27 @@
+---
+
+- name: Install Krakend
+  become: yes
+  become_user: root
+  ansible.builtin.shell: |
+    apt install -y ca-certificates gnupg
+    apt-key adv --keyserver keyserver.ubuntu.com --recv 5DE6FD698AD6FDD2
+    echo "deb https://repo.krakend.io/apt stable main" | tee /etc/apt/sources.list.d/krakend.list
+    apt-get update
+    apt-get install -y krakend
+
+- name: Create Krakend configuration directory
+  ansible.builtin.shell: |
+    K_DIR=/opt/krakend_config
+
+    if [ ! -d "$K_DIR" ]; then
+      mkdir $K_DIR
+    fi
+
+- name: Copy krakend start script
+  ansible.builtin.copy:
+    src: ../../../vars/configs/krakend/krakend_start.sh
+    dest: /opt/krakend_config 
+    mode: '654'
+
+

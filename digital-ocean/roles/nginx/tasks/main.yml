@@ -1,0 +1,15 @@
+---
+- name: Install Nginx
+  become: true
+  apt:
+    name:
+      - nginx
+    state: latest
+    update_cache: yes
+
+- name: start nginx
+  become: true
+  service:
+    name: nginx
+    state: started
+    enabled: true

@@ -1,0 +1,9 @@
+---
+  # https://askubuntu.com/questions/887092/what-does-this-permission-rule-mean
+- name: Grant permission to /var/www/ folder
+  become: yes
+  become_user: "{{ lookup('env', 'SERVER_USER') }}"
+  ansible.builtin.shell: |
+    sudo chown -R "$USER":www-data /var/www
+    find /var/www -type f -exec chmod 0660 {} \;
+    sudo find /var/www -type d -exec chmod 2770 {} \;

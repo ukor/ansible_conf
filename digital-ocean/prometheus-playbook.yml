@@ -1,0 +1,29 @@
+---
+- name: Setup Prometheus and Node exporter
+  hosts: all
+  # remote_user: "{{ lookup('env', 'SERVER_USER') }}" 
+
+  tasks:
+    - name: Install prometheus and node exporter 
+      become: true
+      become_user: "{{ lookup('env', 'SERVER_USER') }}"
+      ansible.builtin.shell: |
+        cat << EOF > /tmp/.grafana.confg
+        GRAFANA_URL=$(echo "{{ lookup('env', 'GRAFANA_URL') }}")
+        GRAFANA_USERNAME=$(echo "{{ lookup('env', 'GRAFANA_USERNAME') }}")
+        GRAFANA_PASSWORD=$(echo "{{ lookup('env', 'GRAFANA_PASSWORD') }}")
+        EOF
+
+        wget -O ~/prometheus_installer.sh https://raw.githubusercontent.com/ukor/prometheus_node_exporter/master/installer.sh
+
+        sudo chmod +x ~/prometheus_installer.sh
+
+        sudo ./prometheus_installer.sh
+
+        wget -O /var/tmp/prometheus_uninstaller.sh https://raw.githubusercontent.com/ukor/prometheus_node_exporter/master/uninstall.sh
+
+        sudo chmod +x /var/tmp/prometheus_uninstaller.sh
+
+        # sudo rm /tmp/.grafana.config
+
+

@@ -1,0 +1,106 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+
+  vars:
+    ansible_connection: local
+    ansible_python_interpreter: "{{ansible_playbook_python}}"
+    oauth_token: "{{ lookup('env', 'DIGITAL_OCEAN_KEY') }}"
+    ssh_public_key: "{{ lookup('env', 'SSH_PUBLIC_KEY') }}"
+
+  vars_files:
+    - vars/default.yml
+
+  vars_prompt:
+    - name: host_name
+      prompt: Enter droplet host name (Should not have space)
+      private: false
+
+    - name: digital_ocean_droplet_size
+      prompt: Enter droplet size (See https://slugs.do-api.dev/)
+      private: false
+      default: s-2vcpu-4gb
+
+  tasks:
+    - name: Debug - Python Environment
+      debug:
+        msg: "{{ ansible_python_interpreter }}"
+    
+    - name: Get SSH Keys from Digital Ocean
+      community.digitalocean.digital_ocean_sshkey_info:
+        oauth_token: "{{ lookup('env', 'DIGITAL_OCEAN_KEY' ) }}"
+      register: DO_ssh_keys
+
+    
+    - name: Parse get SSH keys response
+      vars:
+        key_name: "{{ ssh_key_name }}"
+      set_fact:
+        ssh_key: "{{ item }}" 
+      loop: "{{ DO_ssh_keys.data | default([]) }}"
+      when: item.name == key_name
+
+    - name: Debug - Public key (GET)
+      when: DO_ssh_key is defined
+      debug:
+        msg: "{{ DO_ssh_key.data.public_key }}"
+
+    - name: Create SSH key only if SSH Key has not been set
+      when: ssh_key is undefined
+      community.digitalocean.digital_ocean_sshkey:
+        fingerprint: "{{ lookup('env', 'SSH_FINGER_PRINT') }}"
+        name: serviceAccountKey
+        oauth_token: "{{ lookup('env', 'DIGITAL_OCEAN_KEY') }}"
+        ssh_pub_key: "{{ lookup('env', 'SSH_PUBLIC_KEY') }}"
+        state: present
+      register: set_ssh_key_response
+
+    - name: Set SSH Key if it was created
+      when: set_ssh_key_response.data is defined
+      set_fact:
+        ssh_key: "{{ set_ssh_key_response.data.ssh_key }}"
+
+    - name: Debug - Public Key (POST)
+      when: ssh_key is defined
+      debug:
+        msg: "{{ ssh_key.public_key }}"
+
+    - name: Create a new Droplet
+      community.digitalocean.digital_ocean_droplet:
+        oauth_token: "{{ lookup('env', 'DIGITAL_OCEAN_KEY') }}"
+        state: present 
+        name: "{{ host_name }}"
+        unique_name: true
+        size: "{{ digital_ocean_droplet_size }}"
+        region: lon1
+        image: ubuntu-20-04-x64
+        wait_timeout: 500
+        project_name:  "{{ lookup('env', 'DIGITAL_OCEAN_PROJECT') }}"
+        project: "{{ lookup('env', 'DIGITAL_OCEAN_PROJECT') }}"
+        ipv6: true
+        monitoring: true
+        private_networking: true
+        ssh_keys:
+          - "{{ ssh_key.id }}"
+      register: droplet_details
+
+    - name: Show Droplet info
+      ansible.builtin.debug:
+        msg: |
+          Droplet ID is {{ droplet_details.data.droplet.id }}
+          
+          Public IPv4 is {{ (droplet_details.data.droplet.networks.v4 | selectattr('type', 'equalto', 'public')).0.ip_address | default('<none>', true) }}
+          
+          Private IPv4 is {{ (droplet_details.data.droplet.networks.v4 | selectattr('type', 'equalto', 'private')).0.ip_address | default('<none>', true) }}
+
+    - name: Tag a resource; creating the tag if it does not exist
+      community.digitalocean.digital_ocean_tag:
+        oauth_token: "{{ lookup('env', 'DIGITAL_OCEAN_KEY') }}"
+        name: "{{ item }}"
+        resource_id: "{{ droplet_details.data.droplet.id }}"
+        state: present
+      loop:
+        - applicationServer
+    
+   
