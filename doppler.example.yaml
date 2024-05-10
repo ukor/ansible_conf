@@ -1,0 +1,4 @@
+---
+setup:
+  project: ansible
+  config: dev_<name>

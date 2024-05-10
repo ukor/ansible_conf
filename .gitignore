@@ -1,0 +1,5 @@
+ansible-logs
+.venv/
+doppler.yaml
+doppler.yml
+.doppler.*
