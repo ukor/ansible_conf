@@ -4,10 +4,25 @@
   remote_user: root
 
   tasks:
+    - name: Set primary nginx configuration
+      become: true
+      become_user: root
+      ansible.builtin.copy:
+        src: ./vars/configs/nginx/nginx.conf
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        mode: '0644'
+
+    - name: Copy Nginx reverse proxy SSL configuration  
+      become: true
+      become_user: root
+      ansible.builtin.copy:
+        src: ./vars/configs/nginx/reverse-proxy-443.nginx.conf
+        dest: /etc/nginx/snippets/reverse-proxy-443.nginx.conf
+    
     - name: Copy Nginx reverse proxy configuration  
       become: true
       become_user: root
-    # user: "{{ lookup('env', 'SERVER_USER') }}"
       ansible.builtin.copy:
         src: ./vars/configs/nginx/reverse-proxy.nginx.conf
         dest: /etc/nginx/sites-available/reverse-proxy.nginx.conf

@@ -53,5 +53,70 @@
       sudo ln -sf "$NPM_PREFIX/lib/node_modules/npm/bin/npm-cli.js" "$NPM_SYMLINK_PATH"
     fi
 
+    CORE_PACK_PATH="$NPM_PREFIX/lib/node_modules/corepack/dist/corepack.js"
+
+    if [ -f "$CORE_PACK_PATH" ]
+    then
+
+      CORE_PACK_SYMLINK=/usr/bin/corepack
+      if [ ! -f "$CORE_PACK_SYMLINK" ]
+      then
+        sudo ln -s "$CORE_PACK_PATH" "$CORE_PACK_SYMLINK"
+      else
+        sudo ln -sf "%CORE_PACK_PATH" "$CORE_PACK_SYMLINK"
+      fi
+    fi
+
+    corepack enable
+
     source ~/.bashrc
+
+- name: Install Yarn 
+  become: true
+  become_user: "{{ lookup('env', 'SERVER_USER') }}"
+  ansible.builtin.shell: |
+    NODE_PREFIX=$(npm config get prefix)
+    
+    YARN_PATH="$NODE_PREFIX/lib/node_modules/corepack/dist/yarn.js"
+    
+    YARN_SYMLINK=/usr/bin/yarn
+
+    if [ ! -f "$YARN_PATH" ]
+    then
+      # npm install -g yarn
+      corepack install --global yarn@stable
+      sudo ln -s "$YARN_PATH" "$YARN_SYMLINK"
+    else
+      if [ -f "$YARN_SYMLINK" ]
+      then
+        sudo -sf "$YARN_PATH" "$YARN_SYMLINK"
+      else
+        sudo ln -s "$YARN_PATH" "$YARN_SYMLINK" 
+      fi
+    fi
+
+- name: Install PNPM with Corepack
+  become: true
+  become_user: "{{ lookup('env', 'SERVER_USER') }}"
+  ansible.builtin.shell: |
+    NODE_PREFIX=$(npm config get prefix)
+    
+    PNPM_PATH="$NODE_PREFIX/lib/node_modules/corepack/dist/pnpm.js"
+    
+    PNPM_SYMLINK=/usr/bin/pnpm
+
+    if [ ! -f "$YARN_PATH" ]
+    then
+      # npm install -g pnpm
+      corepack install --global pnpm@*
+      sudo ln -s "$PNPM_PATH" "$PNPM_SYMLINK"
+    else
+      if [ -f "$PNPM_SYMLINK" ]
+      then
+        sudo -sf "$PNPM_PATH" "$PNPM_SYMLINK"
+      else
+        sudo ln -s "$PNPM_PATH" "$PNPM_SYMLINK" 
+      fi
+    fi
+
 
