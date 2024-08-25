@@ -8,6 +8,13 @@
     mode: '0700'
     recurse: yes
 
+- name: Create the known host file if it does not exist
+  ansible.builtin.file:
+    path: ~/.ssh/known_hosts
+    state: touch
+    owner: "{{ lookup('env', 'SERVER_USER') }}"
+    mode: '0660'
+
 - name: Copy SSH config
   become: yes
   become_user: "{{ lookup('env', 'SERVER_USER') }}"
@@ -59,3 +66,18 @@
       echo "$KEY\n" >> "$AUTHORIZED_KEYS_FILE_PATH"
     fi
 
+- name: Add Github SSh key to ssh agent 
+  become: true
+  become_user: "{{ lookup('env', 'SERVER_USER') }}"
+  ansible.builtin.shell: |
+    PRIVATE_KEY_FILE_PATH=~/.ssh/github_machine_account
+
+    eval "$(ssh-agent -s)"
+    ssh-add $PRIVATE_KEY_FILE_PATH 
+
+- name: Add github.com to known_hosts
+  become: true
+  become_user: "{{ lookup('env', 'SERVER_USER') }}"
+  ansible.builtin.shell: |
+    ssh-keyscan -4 -H github.com >> ~/.ssh/known_hosts
+    

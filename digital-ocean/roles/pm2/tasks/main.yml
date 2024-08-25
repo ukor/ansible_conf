@@ -31,35 +31,22 @@
       sudo ln -sf "$NPM_PREFIX/lib/node_modules/pm2/bin/pm2" /usr/bin/pm2
     fi
 
-- name: Print user home directory
-  ansible.builtin.debug:
-    msg: "{{ user_home.stdout }}"
-  
-- name: Set PM2 log directory as variable
-  command: echo "{{ user_home }}/pm2-logs"
-  register: pm2_log_path
-
-- name: Create PM2 log directory 
-  become: true
-  become_user: "{{ lookup('env', 'SERVER_USER') }}"
-  ansible.builtin.file:
-    path: "{{ user_home.stdout }}/pm2-logs"
-    state: directory
-
-- name: Print PM2 log path 
-  become: false
-  ansible.builtin.debug:
-    var: pm2_log_path.stdout
-
+ 
 - name: Install pm2-logrotate using PM2
   command: pm2 install pm2-logrotate
   become: false
   become_user: "{{ lookup('env', 'SERVER_USER') }}"
 
+
 - name: Start PM2 and Log Rotate
   become: true 
   become_user: "{{ lookup('env', 'SERVER_USER') }}"
   ansible.builtin.shell: |
+    #
+    # All logs are written to the default log directory 
+    # ~/.pm2/logs
+    #
+
     pm2 install pm2-logrotate
 
     pm2 set pm2-logrotate: max_size 20K

@@ -120,7 +120,8 @@
     # See https://dmsimard.com/2016/03/15/changing-the-ssh-port-with-ansible
     - name: Restart sshd 
       become_user: root
-      ansible.builtin.service:
-        name: sshd
+      ansible.builtin.systemd_service:
+        name: ssh
+        daemon_reload: true
         state: restarted
  

@@ -73,8 +73,8 @@
         name: "{{ host_name }}"
         unique_name: true
         size: "{{ digital_ocean_droplet_size }}"
-        region: lon1
-        image: ubuntu-20-04-x64
+        region: "{{ lookup('env', 'DIGITAL_OCEAN_REGION') }}"
+        image: ubuntu-24-04-x64
         wait_timeout: 500
         project_name:  "{{ lookup('env', 'DIGITAL_OCEAN_PROJECT') }}"
         project: "{{ lookup('env', 'DIGITAL_OCEAN_PROJECT') }}"
